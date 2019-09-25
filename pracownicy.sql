@@ -28,16 +28,16 @@ SELECT * FROM pracownik
 WHERE stanowisko LIKE '%engineer';
 
 SELECT * FROM pracownik
-WHERE EXTRACT(YEAR FROM data_urodzenia) <= 1989;
+WHERE EXTRACT(YEAR FROM CURDATE()) - EXTRACT(YEAR FROM data_urodzenia) >= 30;
 
-SELECT *, wyplata * 0.1 + wyplata 'powiekszona_wyplata' FROM pracownik
+SELECT *, wyplata * 1.1 'powiekszona_wyplata' FROM pracownik
 WHERE stanowisko LIKE '%engineer';
 
 SELECT * FROM pracownik
-order by data_urodzenia DESC;
+ORDER BY data_urodzenia DESC;
 
 DELETE FROM pracownik
-WHERE id = 4;
+WHERE id = (SELECT id FROM pracownik WHERE data_urodzenia = (SELECT MAX(data_urodzenia) FROM pracownik));
 
 DROP TABLE pracownik;
 
@@ -93,3 +93,5 @@ JOIN stanowisko s ON p.stanowisko_id = s.id;
 SELECT * FROM pracownik p
 JOIN adres a ON p.adres_id = a.id
 WHERE kod_pocztowy = '51-180';
+
+DROP TABLE adres, pracownik, stanowisko;
